@@ -401,23 +401,23 @@ def make_env_op(env_name):
 
 def get_env(num):
     if num == 1:  # Pong
-        env = make_env_po(gym.make('PongNoFrameskip-v4'))
-        wr = "WrPo"
+        env = make_env_po('PongNoFrameskip-v4')
+        wr = "Pong"
     elif num == 2:  # Breakout
-        env = make_env_bo(gym.make('BreakoutNoFrameskip-v4'))
-        wr = "WrBo"
+        env = make_env_bo('BreakoutNoFrameskip-v4')
+        wr = "Breakout"
     elif num == 3:  # Pong Rotated
-        env = make_env_po_rot(gym.make('PongNoFrameskip-v4'))
-        wr = "WrPoRot"
+        env = make_env_po_rot('PongNoFrameskip-v4')
+        wr = "PongRotated"
     elif num == 4:  # Breakout Rotated
-        env = make_env_bo_rot(gym.make('BreakoutNoFrameskip-v4'))
-        wr = "WrBoRot"
+        env = make_env_bo_rot('BreakoutNoFrameskip-v4')
+        wr = "BreakoutRotated"
     elif num == 5:  # Squash
-        env = make_env_sq(gym.make('squash-v0'))
-        wr = "WrSq"
+        env = make_env_sq('squash-v0')
+        wr = "Squash"
     elif num == 6:  # OPong
-        env = make_env_sq(gym.make('squash-v0'))
-        wr = "WrOp"        
+        env = make_env_sq('squash-v0')
+        wr = "OPong"        
         
     return wr, env
 

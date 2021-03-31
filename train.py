@@ -116,7 +116,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     device = torch.device("cuda" if args.cuda else "cpu")
 
-    print(args)
     wr, env = wrappers.get_env(args.wrapper)
     # fix action space to 4 to make compatible with breakout
     action_space = 4
@@ -126,7 +125,7 @@ if __name__ == "__main__":
                             action_space).to(device)
     writer = SummaryWriter(comment="-" + wr)
 
-    print('loaded', args.model)
+    print('Playing', wr, 'loaded', args.model)
     print('gpu', args.cuda)
     print(net)
 
