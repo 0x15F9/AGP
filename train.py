@@ -111,8 +111,7 @@ if __name__ == "__main__":
                         help="Mean reward boundary for stop of training")
     parser.add_argument("-m", "--model", default=MODEL,
                         help="Model file to load")
-    parser.add_argument("-w", "--wrapper", required=True, choices=range(1,7),
-                        type=int, help="Wrapper to use")
+    parser.add_argument("-w", "--wrapper", required=True, type=int, help="Wrapper to use")
     args = parser.parse_args()
     device = torch.device("cuda" if args.cuda else "cpu")
 

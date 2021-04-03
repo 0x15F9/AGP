@@ -1,7 +1,9 @@
 import cv2
 import gym
-import gym_squash
-import gym_opong
+# import gym_squash
+# import gym_opong
+import slimevolleygym
+
 import gym.spaces
 import numpy as np
 import collections
@@ -109,6 +111,24 @@ class ProcessFrame84(gym.ObservationWrapper):
         x_t = np.reshape(x_t, [84, 84, 1])
         return x_t.astype(np.uint8)
 
+
+class ProcessFrame84New(gym.ObservationWrapper):
+    def __init__(self, env=None):
+        super(ProcessFrame84New, self).__init__(env)
+        self.observation_space = gym.spaces.Box(low=0, high=255, shape=(84, 84, 1), dtype=np.uint8)
+
+    def observation(self, obs):
+        return ProcessFrame84New.process(obs)
+
+    @staticmethod
+    def process(frame):
+        img = np.reshape(frame, [84, 168, 3]).astype(np.float32)
+        img= frame
+        img = img[:, :, 0] * 0.299 + img[:, :, 1] * 0.587 + img[:, :, 2] * 0.114
+        resized_screen = cv2.resize(img, (84, 84), interpolation=cv2.INTER_AREA)
+        x_t = resized_screen #[18:102, :]
+        x_t = np.reshape(x_t, [84, 84, 1])
+        return x_t.astype(np.uint8)
 
 class ImageToPyTorch(gym.ObservationWrapper):
     def __init__(self, env):
@@ -399,6 +419,24 @@ def make_env_op(env_name):
     return env
 
 
+def make_env_slime():
+    env = gym.make('SlimeVolleyNoFrameskip-v0')
+    env = MaxAndSkipEnv(env)
+    env = ProcessFrame84New(env)
+    env = ImageToPyTorch(env)
+    env = BufferWrapper(env, 4)
+    env = ScaledFloatFrame(env)
+    return env
+
+def make_env_maze():
+    env = gym.make("maze-sample-3x3-v0")
+    env = MaxAndSkipEnv(env)
+    env = ProcessFrame84(env)
+    env = ImageToPyTorch(env)
+    env = BufferWrapper(env, 4)
+    env = ScaledFloatFrame(env)
+    return env
+
 def get_env(num):
     if num == 1:  # Pong
         env = make_env_po('PongNoFrameskip-v4')
@@ -417,21 +455,28 @@ def get_env(num):
         wr = "Squash"
     elif num == 6:  # OPong
         env = make_env_sq('squash-v0')
-        wr = "OPong"        
+        wr = "OPong"  
+    elif num == 7:  # Maze
+        env = make_env_maze()
+        wr = "Maze"    
+    elif num == 8:  # Slime
+        env = make_env_slime()
+        wr = "Slime"        
         
     return wr, env
 
 if __name__ == '__main__':
-    env = gym.make('squash-v0')
-    # env = ProcessFrame84Squash(env)
+    env = gym.make('SlimeVolleyNoFrameskip-v0')
+    env = ProcessFrame84New(env)
     obs = env.reset()
     for i in range(20):
         obs, _, _, _ = env.step(env.action_space.sample())
-    # cv2.imshow("output", cv2.cvtColor(obs, cv2.COLOR_RGB2BGR))
-    # print(obs.shape)
+    cv2.imshow("output", obs)
+    print(obs.shape)
     
-    f = ProcessFrame84Breakout.process(obs)
-    cv2.imshow("output", cv2.cvtColor(f, cv2.COLOR_RGB2BGR))
-    print(f.shape)
+    
+    # f = ProcessFrame84New.process(obs)
+    # print(f.shape)
+    # cv2.imshow("output", f)
     
     cv2.waitKey(0)
