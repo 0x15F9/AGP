@@ -1,8 +1,6 @@
 import cv2
 import gym
-# import gym_squash
-# import gym_opong
-import slimevolleygym
+import gym_squash
 
 import gym.spaces
 import numpy as np
@@ -409,34 +407,6 @@ def make_env_sq(env_name):
     return env
 
 
-def make_env_op(env_name):
-    env = gym.make(env_name)
-    env = MaxAndSkipEnv(env)
-    env = ProcessFrame84(env)
-    env = ImageToPyTorch(env)
-    env = BufferWrapper(env, 4)
-    env = ScaledFloatFrame(env)
-    return env
-
-
-def make_env_slime():
-    env = gym.make('SlimeVolleyNoFrameskip-v0')
-    env = MaxAndSkipEnv(env)
-    env = ProcessFrame84New(env)
-    env = ImageToPyTorch(env)
-    env = BufferWrapper(env, 4)
-    env = ScaledFloatFrame(env)
-    return env
-
-def make_env_maze():
-    env = gym.make("maze-sample-3x3-v0")
-    env = MaxAndSkipEnv(env)
-    env = ProcessFrame84(env)
-    env = ImageToPyTorch(env)
-    env = BufferWrapper(env, 4)
-    env = ScaledFloatFrame(env)
-    return env
-
 def get_env(num):
     if num == 1:  # Pong
         env = make_env_po('PongNoFrameskip-v4')
@@ -451,23 +421,14 @@ def get_env(num):
         env = make_env_bo_rot('BreakoutNoFrameskip-v4')
         wr = "BreakoutRotated"
     elif num == 5:  # Squash
-        env = make_env_sq('squash-v0')
-        wr = "Squash"
-    elif num == 6:  # OPong
-        env = make_env_sq('squash-v0')
-        wr = "OPong"  
-    elif num == 7:  # Maze
-        env = make_env_maze()
-        wr = "Maze"    
-    elif num == 8:  # Slime
-        env = make_env_slime()
-        wr = "Slime"        
+        env = make_env_sq('Squash-v0')
+        wr = "Squash"  
         
     return wr, env
 
 if __name__ == '__main__':
-    env = gym.make('SlimeVolleyNoFrameskip-v0')
-    env = ProcessFrame84New(env)
+    env = gym.make('Squash-v0')
+    env = ProcessFrame84Squash(env)
     obs = env.reset()
     for i in range(20):
         obs, _, _, _ = env.step(env.action_space.sample())
@@ -475,7 +436,7 @@ if __name__ == '__main__':
     print(obs.shape)
     
     
-    # f = ProcessFrame84New.process(obs)
+    # f = ProcessFrame84Squash.process(obs)
     # print(f.shape)
     # cv2.imshow("output", f)
     
