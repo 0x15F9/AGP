@@ -11,6 +11,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+
 from tensorboardX import SummaryWriter
 
 GAMMA = 0.99
