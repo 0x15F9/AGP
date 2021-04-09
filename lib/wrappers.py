@@ -428,16 +428,28 @@ def get_env(num):
 
 if __name__ == '__main__':
     env = gym.make('Squash-v0')
-    env = ProcessFrame84Squash(env)
-    obs = env.reset()
-    for i in range(20):
-        obs, _, _, _ = env.step(env.action_space.sample())
-    cv2.imshow("output", obs)
-    print(obs.shape)
+    env.reset()
+    for i in range(100):
+        o, r, d, i = env.step(env.action_space.sample())
+        # env.render()
+        if d:
+            env.reset()
+    f = ProcessFrame84Squash.process(o)
+    
+    cv2.imshow("out", f)
+    # env = gym.make('Squash-v0')
+    # env = ProcessFrame84Squash(env)
+    # obs = env.reset()
+    # for i in range(20):
+    #     obs, _, _, _ = env.step(env.action_space.sample())
+    # cv2.imshow("output", obs)
+    # print(obs.shape)
     
     
     # f = ProcessFrame84Squash.process(obs)
     # print(f.shape)
     # cv2.imshow("output", f)
     
+    cv2.imwrite("analysis/squash_.png", f)
     cv2.waitKey(0)
+
