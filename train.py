@@ -178,7 +178,7 @@ if __name__ == "__main__":
                 torch.save({
                     'net_state_dict':  net.state_dict(),
                     'optimizer_state_dict': optimizer.state_dict()
-                }, wr + ostr + str(args.reward) + ".dat")
+                }, wr  + str(args.reward) + ostr + ".dat")
                 if best_mean_reward is not None:
                     print("Best mean reward updated %.3f -> %.3f, model saved" %
                           (best_mean_reward, mean_reward))
