@@ -126,8 +126,12 @@ if __name__ == "__main__":
     tgt_net = dqn_model.DQN(env.observation_space.shape,
                             action_space).to(device)
     writer = SummaryWriter(comment="-" + wr)
+    
+    ostr = ''
+    if args.model:
+        ostr = 'using' + args.model.split('/')[-1].split(' ')[0] 
 
-    print('Playing', wr, 'loaded', args.model)
+    print('Playing', wr, ostr)
     print('gpu', args.cuda)
     print(net)
 
@@ -150,9 +154,6 @@ if __name__ == "__main__":
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         net.train()
         
-    ostr = ''
-    if args.model:
-        ostr = 'using' + args.model.split('/')[-1].split(' ')[0] 
 
     while True:
         frame_idx += 1
