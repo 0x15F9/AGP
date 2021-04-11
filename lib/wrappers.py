@@ -466,7 +466,7 @@ def get_env(num):
         wr = "Squash"  
     elif num == 6:  # Squash Rotated
         env = make_env_sq_rot('Squash-v0')
-        wr = "Squash"  
+        wr = "SquashRotated"  
         
     return wr, env
 
