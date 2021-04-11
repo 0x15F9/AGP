@@ -149,6 +149,10 @@ if __name__ == "__main__":
         net.load_state_dict(checkpoint['net_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         net.train()
+        
+    ostr = ''
+    if args.model:
+        ostr = 'using' + args.model.split('/')[-1].split(' ')[0] 
 
     while True:
         frame_idx += 1
@@ -174,7 +178,7 @@ if __name__ == "__main__":
                 torch.save({
                     'net_state_dict':  net.state_dict(),
                     'optimizer_state_dict': optimizer.state_dict()
-                }, wr + 'using' if args.model else '' + args.model.split('/')[-1] + str(args.reward) + ".dat")
+                }, wr + ostr + str(args.reward) + ".dat")
                 if best_mean_reward is not None:
                     print("Best mean reward updated %.3f -> %.3f, model saved" %
                           (best_mean_reward, mean_reward))
