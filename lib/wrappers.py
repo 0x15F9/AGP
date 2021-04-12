@@ -190,12 +190,12 @@ class EpisodicLifeEnv(gym.Wrapper):
         This way all states are still reachable even though lives are episodic,
         and the learner need not know about any of this behind-the-scenes.
         """
-        if self.was_real_done:
-            obs = self.env.reset(**kwargs)
-        else:
-            # no-op step to advance from terminal/lost life state
-            obs, _, _, _ = self.env.step(0)
-        self.lives = self.env.unwrapped.ale.lives()
+        obs = self.env.reset(**kwargs)
+        # if self.was_real_done:
+        # else:
+        #     # no-op step to advance from terminal/lost life state
+        #     obs, _, _, _ = self.env.step(1)
+        # self.lives = self.env.unwrapped.ale.lives()
         return obs
 
 class ClipRewardEnv(gym.RewardWrapper):
@@ -470,19 +470,33 @@ def get_env(num):
         
     return wr, env
 
+from time import sleep
+
 if __name__ == '__main__':
-    env = gym.make('Squash-v0')
-    env = ProcessFrame84SquashRot(env)
+    # env = gym.make('BreakoutNoFrameskip-v4')
+    env = get_env(2)[1]
     env.reset()
-    for i in range(100):
-        o, r, d, i = env.step(env.action_space.sample())
-        # env.render()
+    done = 0
+    # while done < 2:
+    #     o, r, d, i = env.step(0)
+    #     env.render()
+    #     sleep(0.05)
+    #     print(d)
+    #     if d:
+    #         print(done)
+    #         env.reset()
+    #         done += 1
+    d = False
+    for _ in range(200):
+        o, r, d, i = env.step(3)
+        env.render()
+        sleep(0.05)
         if d:
             env.reset()
     # f = ProcessFrame84SquashRot.process(o)
-    f = o
+    # f = o
     
-    cv2.imshow("out", f)
+    # cv2.imshow("out", f)
     # env = gym.make('Squash-v0')
     # env = ProcessFrame84Squash(env)
     # obs = env.reset()
@@ -496,6 +510,6 @@ if __name__ == '__main__':
     # print(f.shape)
     # cv2.imshow("output", f)
     
-    cv2.imwrite("analysis/squash_.png", f)
-    cv2.waitKey(0)
+    # cv2.imwrite("analysis/squash_.png", f)
+    # cv2.waitKey(0)
 
